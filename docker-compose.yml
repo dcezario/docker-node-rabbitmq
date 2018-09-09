@@ -1,0 +1,26 @@
+version: "3"
+services:
+  app:
+    container_name: web
+    command: npm start
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - AMQP_RECEIVE_URL=amqp://rabbitmq:rabbitmq@rabbitmq:5672
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management  
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=OASKAWOWKDXO
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq 
